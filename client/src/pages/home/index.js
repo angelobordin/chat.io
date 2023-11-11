@@ -3,6 +3,8 @@ import Navigation from "../../components/navigation";
 import Chat from "../../components/chat";
 
 const Home = () => {
+	const user_data = JSON.parse(localStorage.getItem("user_data"));
+
 	const [selectedContact, setSelectedContact] = useState(null);
 
 	const handleContactSelect = (contact) => {
@@ -11,8 +13,8 @@ const Home = () => {
 
 	return (
 		<div>
-			<Navigation onSelectContact={handleContactSelect} />
-			<Chat selectedContact={selectedContact} />
+			<Navigation onSelectContact={handleContactSelect} userData={user_data} />
+			<Chat selectedContact={selectedContact} userData={user_data} />
 		</div>
 	);
 };
