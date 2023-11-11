@@ -1,20 +1,19 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "../../components/button";
-import useAuth from "../../hooks/useAuth";
-import * as C from "./styles";
+import React, { useState } from "react";
+import Navigation from "../../components/navigation";
+import Chat from "../../components/chat";
 
 const Home = () => {
-	const { signout } = useAuth();
-	const navigate = useNavigate();
+	const [selectedContact, setSelectedContact] = useState(null);
+
+	const handleContactSelect = (contact) => {
+		setSelectedContact(contact);
+	};
 
 	return (
-		<C.Container>
-			<C.Title>Home</C.Title>
-			<Button Text="Sair" onClick={() => [signout(), navigate("/")]}>
-				Sair
-			</Button>
-		</C.Container>
+		<div className="app-container">
+			<Navigation onSelectContact={handleContactSelect} />
+			<Chat selectedContact={selectedContact} />
+		</div>
 	);
 };
 
