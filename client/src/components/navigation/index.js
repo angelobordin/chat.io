@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./sidebar.css";
 
-const Navigation = ({ onSelectContact }) => {
+const Navigation = ({ onSelectContact, userData }) => {
 	const [contacts, setContacts] = useState([]);
 	const [selectedContact, setSelectedContact] = useState(null);
 
 	useEffect(() => {
-		// Fetch contacts from backend
-		// Example: fetch('/api/contacts').then(response => response.json()).then(data => setContacts(data));
-		// Replace the above fetch with your actual API call
+		const handleContacts = async () => {
+			const response = await axios.get("http://localhost:8080/user/list");
+			const contactList = response.data.data;
 
-		// For testing purposes, I'll provide a sample array
-		const sampleContacts = ["User1", "User2", "User3"];
-		setContacts(sampleContacts);
+			for (let index = 0; index < contactList.length; index++) {
+				if (contactList[index]._id !== userData.id) {
+					setContacts([
+						...contacts,
+						{
+							_id: contactList[index]._id,
+							nome: contactList[index].nome,
+						},
+					]);
+				}
+			}
+		};
+
+		handleContacts();
 	}, []);
 
 	const handleSelectContact = (contact) => {
@@ -24,8 +36,8 @@ const Navigation = ({ onSelectContact }) => {
 		<div className="sidebar">
 			<ul>
 				{contacts.map((contact) => (
-					<li key={contact} onClick={() => handleSelectContact(contact)} className={selectedContact === contact ? "active" : ""}>
-						{contact}
+					<li key={contact._id} onClick={() => handleSelectContact(contact)} className={selectedContact === contact ? "active" : ""}>
+						{contact.nome}
 					</li>
 				))}
 			</ul>

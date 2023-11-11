@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import "./chat.css";
 
-const socket = io("http://localhost:8080");
-socket.on("connect", () => console.log(`[IO] Connect => New connection established`));
-
 const Chat = ({ selectedContact }) => {
+	const socket = io("http://localhost:8080");
+	socket.on("connect", () => console.log(`[IO] Connect => New connection established`));
+
 	const [messages, setMessages] = useState([]);
 	const [newMessage, setNewMessage] = useState("");
 

@@ -43,7 +43,7 @@ export class UserService {
 
 			await this.checkUserCredentials(user, loginUserData.password);
 
-			const token = Jwt.sign(loginUserData, process.env.PASSOWOR_SECRET, { expiresIn: "1h" });
+			const token = Jwt.sign(loginUserData, process.env.PASSOWORD_SECRET, { expiresIn: "1h" });
 
 			const userData = {
 				nome: user.nome,
@@ -55,6 +55,22 @@ export class UserService {
 				userData,
 				token,
 			});
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getUserList() {
+		try {
+			const repository = new UserRepository();
+			const userList = await repository.getUserList();
+
+			const filteredUserList = userList.map((user) => {
+				const { password, ...resto } = user;
+				return resto;
+			});
+
+			return this.createSuccessResponse("Lista de contatos carregada!", filteredUserList);
 		} catch (error) {
 			throw error;
 		}

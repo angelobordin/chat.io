@@ -50,4 +50,19 @@ export class UserRepository {
 			await this.#database.close();
 		}
 	}
+
+	async getUserList() {
+		try {
+			await this.#database.connect();
+			const userCollection = this.#database.getUserCollection();
+
+			const result = await userCollection.find().toArray();
+
+			return result;
+		} catch (error) {
+			throw error;
+		} finally {
+			await this.#database.close();
+		}
+	}
 }
