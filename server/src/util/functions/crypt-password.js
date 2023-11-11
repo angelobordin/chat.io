@@ -1,13 +1,34 @@
-import { randomBytes, scryptSync } from "crypto";
-
+import bcrypt from "bcrypt";
 export class Password {
-	static generateHashPassword(password) {
-		const saltPassword = randomBytes(16).toString("hex");
-		const hashPassword = scryptSync(password, saltPassword, 64).toString("hex");
+	/**
+	 *
+	 * @param {string} password
+	 * @returns
+	 */
+	static async generateHashPassword(password) {
+		try {
+			const saltPassword = bcrypt.genSaltSync(10);
+			const hashPassword = bcrypt.hashSync(password, saltPassword);
 
-		return {
-			saltPassword,
-			hashPassword,
-		};
+			return hashPassword;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	/**
+	 *
+	 * @param {object} user
+	 * @param {string} password
+	 * @returns
+	 */
+	static async validPassword(user, password) {
+		try {
+			const match = bcrypt.compareSync(password, user.password);
+
+			return match;
+		} catch (error) {
+			throw error;
+		}
 	}
 }
