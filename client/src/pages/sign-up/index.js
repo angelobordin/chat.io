@@ -15,24 +15,16 @@ const Signup = () => {
 
 	const { signup } = useAuth();
 
-	const handleSignup = () => {
-		if (!username | !usernameConf | !password) {
+	const handleSignup = async () => {
+		if (!username || !usernameConf || !password || !name) {
 			setError("Preencha todos os campos");
 			return;
 		} else if (username !== usernameConf) {
-			setError("Os dados de usuário não são iguais");
+			setError("Username/E-mail não batem");
 			return;
 		}
 
-		const res = signup(username, password);
-
-		if (res) {
-			setError(res);
-			return;
-		}
-
-		alert("Usuário cadatrado com sucesso!");
-		navigate("/");
+		if (await signup(name, username, password)) navigate("/");
 	};
 
 	return (

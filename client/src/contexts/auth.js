@@ -1,4 +1,6 @@
+import "react-toastify/dist/ReactToastify.css";
 import { createContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import axios from "axios";
 
 export const AuthContext = createContext({});
@@ -24,35 +26,27 @@ export const AuthProvider = ({ children }) => {
 		if (!response.data.error) {
 			localStorage.setItem("user_data", JSON.stringify(response.data.data.userData));
 			localStorage.setItem("token", JSON.stringify(response.data.data.token));
-			// TOASTR
+
+			toast.success(response.data.message);
 			setSigned(true);
 			return true;
 		} else {
-			// TOASTR
+			toast.error(response.data.message);
 			return false;
 		}
 	};
 
-	const signup = (email, password) => {
-		const usersStorage = JSON.parse(localStorage.getItem("users_bd"));
+	const signup = async (nome, username, password) => {
+		const response = await axios.post("http://localhost:8080/user/signup", { nome, username, password });
+		console.log(response);
 
-		const hasUser = usersStorage?.filter((user) => user.email === email);
-
-		if (hasUser?.length) {
-			return "Já tem uma conta com esse E-mail";
-		}
-
-		let newUser;
-
-		if (usersStorage) {
-			newUser = [...usersStorage, { email, password }];
+		if (!response.data.error) {
+			toast.success(response.data.message);
+			return true;
 		} else {
-			newUser = [{ email, password }];
+			toast.error(response.data.message);
+			return false;
 		}
-
-		localStorage.setItem("users_bd", JSON.stringify(newUser));
-
-		return;
 	};
 
 	const signout = () => {
