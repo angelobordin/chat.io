@@ -16,10 +16,15 @@ export class UserController {
 			return res.send(result);
 		} catch (error) {
 			if (error instanceof Error) {
-				return res.status(500).send(error.message);
+				return res.send({
+					status: 400,
+					message: error.message,
+					error: true,
+					data: null,
+				});
 			}
 
-			return res.status(500).send(error);
+			return res.send(error);
 		}
 	}
 
@@ -38,10 +43,15 @@ export class UserController {
 			return res.send(result);
 		} catch (error) {
 			if (error instanceof Error) {
-				return res.status(500).send(error.message);
+				return res.send({
+					status: 400,
+					message: error.message,
+					error: true,
+					data: null,
+				});
 			}
 
-			return res.status(500).send(error);
+			return res.send(error);
 		}
 	}
 }
