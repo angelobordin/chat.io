@@ -1,3 +1,4 @@
+import Jwt from "jsonwebtoken";
 import { UserRepository } from "../repository/user-repository.js";
 import { userCollection } from "../util/database/mongo-connection.js";
 import { Password } from "../util/functions/crypt-password.js";
@@ -15,14 +16,13 @@ export class UserService {
 	async registerUser(newUserData) {
 		try {
 			const repository = new UserRepository();
-			const userExists = await repository.getUserByName(newUserData.username, userCollection);
+			const userExists = await repository.getUserByUserName(newUserData.username, userCollection);
 			if (userExists) throw new Error(`Usuário já cadastrado!!`);
 
-			const { hashPassword, saltPassword } = Password.generateHashPassword(newUserData.password);
+			const hashPassword = await Password.generateHashPassword(newUserData.password);
 			newUserData = {
 				...newUserData,
 				password: hashPassword,
-				saltPassword,
 			};
 
 			const result = await repository.registerUser(newUserData, userCollection);
@@ -31,6 +31,33 @@ export class UserService {
 				status: 200,
 				message: "Usuário cadastro com sucesso!",
 				data: result,
+			};
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	/**
+	 *
+	 * @param {object} loginUserData
+	 * @param {string} loginUserData.username - O nome de usuário.
+	 * @param {string} loginUserData.password - A senha do usuário.
+	 * @returns
+	 */
+	async loginUser(loginUserData) {
+		try {
+			const repository = new UserRepository();
+			const user = await repository.getUserByUserName(loginUserData.username, userCollection);
+			if (!user) throw new Error(`Credenciais incorretas!`);
+
+			if (!(await Password.validPassword(user, loginUserData.password))) throw new Error(`Credenciais incorretas!`);
+
+			const token = Jwt.sign(loginUserData, process.env.PASSOWOR_SECRET, { expiresIn: "1h" });
+
+			return {
+				status: 200,
+				message: "Usuário logado com sucesso!",
+				data: token,
 			};
 		} catch (error) {
 			throw error;
