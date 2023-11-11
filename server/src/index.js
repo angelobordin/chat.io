@@ -2,12 +2,17 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import bodyParser from "body-parser";
+import http from "http";
 import UserRoutes from "./routes/user-routes.js";
-import "./util/database/mongo-connection.js";
+import Database from "./util/database/mongo-connection.js";
+import SocketServer from "./socket.js";
 
-class Server {
+class HttpServer {
 	#server;
 	#port;
+	#httpServer;
+	#dataBase;
+	#socketManager;
 
 	/**
 	 *
@@ -16,12 +21,20 @@ class Server {
 	constructor(_port) {
 		this.#server = new express();
 		this.#port = _port;
-		this.initializateMiddleware();
+		this.#httpServer = http.createServer(this.#server);
+		this.#socketManager = new SocketServer(this.#httpServer);
+		this.#dataBase = new Database();
+
+		this.initMiddleware();
 		this.initRouteBase();
 		this.initErrorHandling();
 	}
 
-	initializateMiddleware() {
+	async initDatabase() {
+		await this.#dataBase.connect();
+	}
+
+	initMiddleware() {
 		console.log("Initializing Middlewares...");
 		this.#server.use(express.json());
 		this.#server.use(cors());
@@ -41,9 +54,10 @@ class Server {
 		// this.#server.use(errorHandler);
 	}
 
-	listen() {
-		this.#server.listen(this.#port, () => console.log(`[HTPP] Server => Server is running at port ${this.#port}`));
+	async listen() {
+		await this.initDatabase();
+		this.#httpServer.listen(this.#port, () => console.log(`[HTTP] Server => Server is running at port ${this.#port}`));
 	}
 }
 
-new Server(8080).listen();
+new HttpServer(8080).listen();

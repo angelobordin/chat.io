@@ -1,6 +1,12 @@
-import { Collection } from "mongodb";
+import Database from "../util/database/mongo-connection.js";
 
 export class UserRepository {
+	#database;
+
+	constructor() {
+		this.#database = new Database();
+	}
+
 	/**
 	 *
 	 * @param {object} newUserData
@@ -8,34 +14,40 @@ export class UserRepository {
 	 * @param {string} newUserData.username - O nome de usuário.
 	 * @param {string} newUserData.password - A senha do usuário.
 	 * @param {boolean} newUserData.status - Status do usuário.
-	 *
-	 * @param {Collection} userCollection
 	 * @returns
 	 */
-	async registerUser(newUserData, userCollection) {
+	async registerUser(newUserData) {
 		try {
+			await this.#database.connect();
+			const userCollection = this.#database.getUserCollection();
+
 			const result = await userCollection.insertOne(newUserData);
 
 			return result;
 		} catch (error) {
 			throw error;
+		} finally {
+			await this.#database.close();
 		}
 	}
 
 	/**
 	 *
 	 * @param {string} username - O username do usuário.
-	 *
-	 * @param {Collection} userCollection
 	 * @returns
 	 */
-	async getUserByUserName(username, userCollection) {
+	async getUserByUserName(username) {
 		try {
+			await this.#database.connect();
+			const userCollection = this.#database.getUserCollection();
+
 			const result = await userCollection.findOne({ username: username });
 
 			return result;
 		} catch (error) {
 			throw error;
+		} finally {
+			await this.#database.close();
 		}
 	}
 }

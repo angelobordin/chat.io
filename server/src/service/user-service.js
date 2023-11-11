@@ -1,23 +1,20 @@
 import Jwt from "jsonwebtoken";
 import { UserRepository } from "../repository/user-repository.js";
-import { userCollection } from "../util/database/mongo-connection.js";
 import { Password } from "../util/functions/crypt-password.js";
 
 export class UserService {
 	/**
-	 *
 	 * @param {object} newUserData
 	 * @param {string} newUserData.nome - O nome do usuário.
 	 * @param {string} newUserData.username - O nome de usuário.
 	 * @param {string} newUserData.password - A senha do usuário.
 	 * @param {boolean} newUserData.status - Status do usuário.
-	 * @returns
+	 * @returns {object}
 	 */
 	async registerUser(newUserData) {
 		try {
-			const repository = new UserRepository();
-			const userExists = await repository.getUserByUserName(newUserData.username, userCollection);
-			if (userExists) throw new Error(`Usuário já cadastrado!!`);
+			// await this.database.connect();
+			await this.checkIfUserExists(newUserData.username);
 
 			const hashPassword = await Password.generateHashPassword(newUserData.password);
 			newUserData = {
@@ -25,49 +22,89 @@ export class UserService {
 				password: hashPassword,
 			};
 
-			const result = await repository.registerUser(newUserData, userCollection);
+			const repository = new UserRepository();
+			const result = await repository.registerUser(newUserData);
 
-			return {
-				status: 200,
-				message: "Usuário cadastro com sucesso!",
-				data: result,
-			};
+			return this.createSuccessResponse("Usuário cadastrado com sucesso!", result);
 		} catch (error) {
 			throw error;
 		}
 	}
 
 	/**
-	 *
 	 * @param {object} loginUserData
 	 * @param {string} loginUserData.username - O nome de usuário.
 	 * @param {string} loginUserData.password - A senha do usuário.
-	 * @returns
+	 * @returns {object}
 	 */
 	async loginUser(loginUserData) {
 		try {
-			const repository = new UserRepository();
-			const user = await repository.getUserByUserName(loginUserData.username, userCollection);
-			if (!user) throw new Error(`Usuário não cadastrado!`);
+			const user = await this.getUserByUsername(loginUserData.username);
 
-			if (!(await Password.validPassword(user, loginUserData.password))) throw new Error(`Credenciais incorretas!`);
+			await this.checkUserCredentials(user, loginUserData.password);
 
 			const token = Jwt.sign(loginUserData, process.env.PASSOWOR_SECRET, { expiresIn: "1h" });
 
-			return {
-				status: 200,
-				message: "Usuário logado com sucesso!",
-				data: {
-					userData: {
-						nome: user.nome,
-						username: user.username,
-						id: user._id,
-					},
-					token,
-				},
+			const userData = {
+				nome: user.nome,
+				username: user.username,
+				id: user._id,
 			};
+
+			return this.createSuccessResponse("Usuário logado com sucesso!", {
+				userData,
+				token,
+			});
 		} catch (error) {
 			throw error;
 		}
+	}
+
+	/**
+	 * @private
+	 * @param {string} username
+	 * @throws {Error} Usuário já cadastrado
+	 */
+	async checkIfUserExists(username) {
+		const repository = new UserRepository();
+		const userExists = await repository.getUserByUserName(username);
+		if (userExists) throw new Error(`Usuário já cadastrado!`);
+	}
+
+	/**
+	 * @private
+	 * @param {string} username
+	 * @returns {object}
+	 * @throws {Error} Usuário não cadastrado
+	 */
+	async getUserByUsername(username) {
+		const repository = new UserRepository();
+		const user = await repository.getUserByUserName(username);
+		if (!user) throw new Error(`Usuário não cadastrado!`);
+		return user;
+	}
+
+	/**
+	 * @private
+	 * @param {object} user
+	 * @param {string} password
+	 * @throws {Error} Credenciais incorretas
+	 */
+	async checkUserCredentials(user, password) {
+		if (!(await Password.validPassword(user, password))) throw new Error(`Credenciais incorretas!`);
+	}
+
+	/**
+	 * @private
+	 * @param {string} message
+	 * @param {object} data
+	 * @returns {object}
+	 */
+	createSuccessResponse(message, data) {
+		return {
+			status: 200,
+			message,
+			data,
+		};
 	}
 }
