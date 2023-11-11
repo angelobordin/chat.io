@@ -48,7 +48,7 @@ export class UserService {
 		try {
 			const repository = new UserRepository();
 			const user = await repository.getUserByUserName(loginUserData.username, userCollection);
-			if (!user) throw new Error(`Credenciais incorretas!`);
+			if (!user) throw new Error(`Usuário não cadastrado!`);
 
 			if (!(await Password.validPassword(user, loginUserData.password))) throw new Error(`Credenciais incorretas!`);
 
@@ -57,7 +57,14 @@ export class UserService {
 			return {
 				status: 200,
 				message: "Usuário logado com sucesso!",
-				data: token,
+				data: {
+					userData: {
+						nome: user.nome,
+						username: user.username,
+						id: user._id,
+					},
+					token,
+				},
 			};
 		} catch (error) {
 			throw error;
