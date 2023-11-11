@@ -29,7 +29,7 @@ export class UserRepository {
 	 * @param {Collection} userCollection
 	 * @returns
 	 */
-	async getUserByName(username, userCollection) {
+	async getUserByUserName(username, userCollection) {
 		try {
 			const result = await userCollection.findOne({ username: username });
 
