@@ -54,4 +54,30 @@ export class UserController {
 			return res.send(error);
 		}
 	}
+
+	/**
+	 *
+	 * @param {import("express").Request} req
+	 * @param {import("express").Response} res
+	 * @returns
+	 */
+	static async getUserList(req, res) {
+		try {
+			const service = new UserService();
+			const result = await service.getUserList();
+
+			return res.send(result);
+		} catch (error) {
+			if (error instanceof Error) {
+				return res.send({
+					status: 400,
+					message: error.message,
+					error: true,
+					data: null,
+				});
+			}
+
+			return res.send(error);
+		}
+	}
 }
