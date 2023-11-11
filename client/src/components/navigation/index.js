@@ -37,7 +37,7 @@ const Navigation = ({ onSelectContact, userData }) => {
 			<ul>
 				{contacts.map((contact) => (
 					<li key={contact._id} onClick={() => handleSelectContact(contact)} className={selectedContact === contact ? "active" : ""}>
-						{contact.nome}t
+						{contact.nome}
 					</li>
 				))}
 			</ul>
