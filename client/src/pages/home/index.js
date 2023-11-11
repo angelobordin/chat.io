@@ -10,7 +10,7 @@ const Home = () => {
 	};
 
 	return (
-		<div className="app-container">
+		<div>
 			<Navigation onSelectContact={handleContactSelect} />
 			<Chat selectedContact={selectedContact} />
 		</div>
