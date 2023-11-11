@@ -1,9 +1,11 @@
 import { createContext, useEffect, useState } from "react";
+import axios from "axios";
 
 export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState();
+	const [signed, setSigned] = useState(false);
 
 	useEffect(() => {
 		const userToken = localStorage.getItem("user_token");
@@ -16,22 +18,18 @@ export const AuthProvider = ({ children }) => {
 		}
 	}, []);
 
-	const signin = (email, password) => {
-		const usersStorage = JSON.parse(localStorage.getItem("users_bd"));
+	const signin = async (username, password) => {
+		const response = await axios.post("http://localhost:8080/user/signin", { username, password });
 
-		const hasUser = usersStorage?.filter((user) => user.email === email);
-
-		if (hasUser?.length) {
-			if (hasUser[0].email === email && hasUser[0].password === password) {
-				const token = Math.random().toString(36).substring(2);
-				localStorage.setItem("user_token", JSON.stringify({ email, token }));
-				setUser({ email, password });
-				return;
-			} else {
-				return "E-mail ou senha incorretos";
-			}
+		if (!response.data.error) {
+			localStorage.setItem("user_data", JSON.stringify(response.data.data.userData));
+			localStorage.setItem("token", JSON.stringify(response.data.data.token));
+			// TOASTR
+			setSigned(true);
+			return true;
 		} else {
-			return "Usuário não cadastrado";
+			// TOASTR
+			return false;
 		}
 	};
 
@@ -62,5 +60,5 @@ export const AuthProvider = ({ children }) => {
 		localStorage.removeItem("user_token");
 	};
 
-	return <AuthContext.Provider value={{ user, signed: !!user, signin, signup, signout }}>{children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={{ user, signed, signin, signup, signout }}>{children}</AuthContext.Provider>;
 };

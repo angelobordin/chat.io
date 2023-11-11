@@ -13,20 +13,13 @@ const Signin = () => {
 	const [senha, setSenha] = useState("");
 	const [error, setError] = useState("");
 
-	const handleLogin = () => {
-		if (!username | !senha) {
+	const handleLogin = async () => {
+		if (!username || !senha) {
 			setError("Preencha todos os campos");
 			return;
 		}
 
-		const res = signin(username, senha);
-
-		if (res) {
-			setError(res);
-			return;
-		}
-
-		navigate("/home");
+		if (await signin(username, senha)) navigate("/home");
 	};
 
 	return (
