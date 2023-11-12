@@ -7,7 +7,16 @@ import { toast } from "react-toastify";
 export const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
-	const socket = io(localhostURL);
+	const token = localStorage.getItem("token");
+	const socket = io(localhostURL, {
+		transportOptions: {
+			polling: {
+				extraHeaders: {
+					Authorization: `Bearer ${token}`,
+				},
+			},
+		},
+	});
 
 	useEffect(() => {
 		socket.on("message notification", (messageData) => {

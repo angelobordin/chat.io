@@ -1,6 +1,7 @@
 import { Server as SocketIoServer } from "socket.io";
 import { MessageService } from "./service/message-service.js";
 import { UserService } from "./service/user-service.js";
+import { socketAuth } from "./util/middleware/socketAuth.js";
 
 class SocketServer {
 	#io;
@@ -17,6 +18,7 @@ class SocketServer {
 	}
 
 	initSocketIO() {
+		// this.#io.use(socketAuth);
 		this.#io.on("connection", (socket) => {
 			console.log("[IO] Connection => User has been connected", socket.id);
 
@@ -51,6 +53,7 @@ class SocketServer {
 			});
 
 			socket.on("logout", (userId) => {
+				console.log("chegou no socket", userId);
 				this.#io.emit("update status", { id: userId, status: false });
 			});
 
