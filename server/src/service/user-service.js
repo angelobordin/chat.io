@@ -2,6 +2,7 @@ import Jwt from "jsonwebtoken";
 import { UserRepository } from "../repository/user-repository.js";
 import { Password } from "../util/functions/crypt-password.js";
 import { createSuccessResponse } from "../util/functions/response.js";
+import UserModel from "../model/user-model.js";
 
 export class UserService {
 	/**
@@ -14,7 +15,6 @@ export class UserService {
 	 */
 	async registerUser(newUserData) {
 		try {
-			// await this.database.connect();
 			await this.checkIfUserExists(newUserData.username);
 
 			const hashPassword = await Password.generateHashPassword(newUserData.password);
@@ -40,11 +40,13 @@ export class UserService {
 	 */
 	async loginUser(loginUserData) {
 		try {
-			const user = await this.getUserByUsername(loginUserData.username);
+			const user = await UserService.getUserByUsername(loginUserData.username);
 
 			await this.checkUserCredentials(user, loginUserData.password);
 
 			const token = Jwt.sign(loginUserData, process.env.TOKEN_SECRET, { expiresIn: "30d" });
+
+			await UserModel.findOneAndUpdate({ username: loginUserData.username }, { $set: { status: true } });
 
 			const userData = {
 				nome: user.nome,
@@ -83,10 +85,14 @@ export class UserService {
 	 * @throws {Error} Usuário já cadastrado
 	 */
 	async checkIfUserExists(username) {
-		const repository = new UserRepository();
-		const userExists = await repository.getUserByUserName(username);
-		if (userExists) throw new Error(`Usuário já cadastrado!`);
-		return;
+		try {
+			const repository = new UserRepository();
+			const userExists = await repository.getUserByUserName(username);
+			if (userExists) throw new Error(`Usuário já cadastrado!`);
+			return;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	/**
@@ -95,11 +101,15 @@ export class UserService {
 	 * @returns {object}
 	 * @throws {Error} Usuário não cadastrado
 	 */
-	async getUserByUsername(username) {
-		const repository = new UserRepository();
-		const user = await repository.getUserByUserName(username);
-		if (!user) throw new Error(`Usuário não cadastrado!`);
-		return user;
+	static async getUserByUsername(username) {
+		try {
+			const repository = new UserRepository();
+			const user = await repository.getUserByUserName(username);
+			if (!user) throw new Error(`Usuário não cadastrado!`);
+			return user;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	/**
@@ -109,6 +119,10 @@ export class UserService {
 	 * @throws {Error} Credenciais incorretas
 	 */
 	async checkUserCredentials(user, password) {
-		if (!(await Password.validPassword(user, password))) throw new Error(`Credenciais incorretas!`);
+		try {
+			if (!(await Password.validPassword(user, password))) throw new Error(`Credenciais incorretas!`);
+		} catch (error) {
+			throw error;
+		}
 	}
 }

@@ -5,9 +5,10 @@ export class UserController {
 	 *
 	 * @param {import("express").Request} req
 	 * @param {import("express").Response} res
+	 * @param {import("express".NextFunction)} next
 	 * @returns
 	 */
-	static async registerUser(req, res) {
+	static async registerUser(req, res, next) {
 		try {
 			const newUserData = req.body;
 			const service = new UserService();
@@ -15,7 +16,7 @@ export class UserController {
 
 			return res.send(result);
 		} catch (error) {
-			throw error;
+			next(error);
 		}
 	}
 
@@ -23,9 +24,10 @@ export class UserController {
 	 *
 	 * @param {import("express").Request} req
 	 * @param {import("express").Response} res
+	 * @param {import("express".NextFunction)} next
 	 * @returns
 	 */
-	static async loginUser(req, res) {
+	static async loginUser(req, res, next) {
 		try {
 			const loginUserData = req.body;
 			const service = new UserService();
@@ -33,7 +35,7 @@ export class UserController {
 
 			return res.send(result);
 		} catch (error) {
-			throw error;
+			next(error);
 		}
 	}
 
@@ -41,16 +43,17 @@ export class UserController {
 	 *
 	 * @param {import("express").Request} req
 	 * @param {import("express").Response} res
+	 * @param {import("express".NextFunction)} next
 	 * @returns
 	 */
-	static async getUserList(req, res) {
+	static async getUserList(req, res, next) {
 		try {
 			const service = new UserService();
 			const result = await service.getUserList();
 
 			return res.send(result);
 		} catch (error) {
-			throw error;
+			next(error);
 		}
 	}
 }
