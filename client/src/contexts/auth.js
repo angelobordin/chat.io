@@ -1,6 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
-import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { createContext, useEffect, useState } from "react";
 import { HttpClient } from "../util/api/httpClient.js";
 
 export const AuthContext = createContext({});

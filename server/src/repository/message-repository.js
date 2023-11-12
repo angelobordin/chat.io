@@ -34,9 +34,9 @@ export class MessageRepository {
 			const chat = await ChatModel.findById(chatId);
 			if (!chat) throw new Error(`Conversa não encontrada`);
 
-			await chat.registerMessage(user, content);
+			const result = await chat.registerMessage(user, content);
 
-			return;
+			return result;
 		} catch (error) {
 			throw error;
 		}
