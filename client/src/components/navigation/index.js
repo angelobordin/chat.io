@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { HttpClient } from "../../util/api/httpClient";
 import useSocket from "../../hooks/useSocket";
+import useAuth from "../../hooks/useAuth";
+import Button from "../button";
 import "./sidebar.css";
 
 const Navigation = ({ onSelectContact, userData }) => {
 	let socket = useSocket();
+	const { signout } = useAuth();
+	const navigate = useNavigate();
 
 	const [contacts, setContacts] = useState([]);
 	const [selectedContact, setSelectedContact] = useState(null);
 
 	useEffect(() => {
-		socket.on("update status", (userId) => {
-			const updatedContacts = contacts.map((contact) => (contact._id === userId ? { ...contact, status: true } : contact));
+		socket.on("update status", (data) => {
+			const updatedContacts = contacts.map((contact) => (contact._id === data.id ? { ...contact, status: data.status } : contact));
 
 			setContacts(updatedContacts);
 		});
@@ -42,6 +47,17 @@ const Navigation = ({ onSelectContact, userData }) => {
 		onSelectContact(contact);
 	};
 
+	const signOut = async () => {
+		if (await signout()) {
+			const user = JSON.parse(localStorage.getItem("user_data"));
+			socket.emit("logout", user.id);
+			navigate("/signin");
+
+			localStorage.removeItem("token");
+			localStorage.removeItem("user_data");
+		}
+	};
+
 	return (
 		<div className="sidebar">
 			<ul>
@@ -52,6 +68,7 @@ const Navigation = ({ onSelectContact, userData }) => {
 					</li>
 				))}
 			</ul>
+			<Button Text="Desconectar" onClick={signOut} />
 		</div>
 	);
 };

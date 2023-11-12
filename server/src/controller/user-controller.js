@@ -46,6 +46,25 @@ export class UserController {
 	 * @param {import("express".NextFunction)} next
 	 * @returns
 	 */
+	static async logoutUser(req, res, next) {
+		try {
+			const userId = req.body;
+			const service = new UserService();
+			const result = await service.logoutUser(userId);
+
+			return res.send(result);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	/**
+	 *
+	 * @param {import("express").Request} req
+	 * @param {import("express").Response} res
+	 * @param {import("express".NextFunction)} next
+	 * @returns
+	 */
 	static async getUserList(req, res, next) {
 		try {
 			const service = new UserService();

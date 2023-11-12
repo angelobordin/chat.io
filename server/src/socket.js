@@ -35,13 +35,17 @@ class SocketServer {
 			});
 
 			socket.on("login", (userId) => {
-				this.#io.emit("update status", userId);
+				this.#io.emit("update status", { id: userId, status: true });
 			});
 
 			socket.on("register", async (userUsername) => {
 				const { name: nome, username, _id, status } = await UserService.getUserByUsername(userUsername);
 
 				this.#io.emit("new register", { name: nome, username, _id, status });
+			});
+
+			socket.on("logout", (userId) => {
+				this.#io.emit("update status", { id: userId, status: false });
 			});
 
 			socket.on("disconnect", () => {

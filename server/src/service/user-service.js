@@ -63,6 +63,20 @@ export class UserService {
 		}
 	}
 
+	/**
+	 * @param {object} userId
+	 * @returns {object}
+	 */
+	async logoutUser(userId) {
+		try {
+			await UserModel.findOneAndUpdate(userId, { $set: { status: false } });
+
+			return createSuccessResponse("Usuário desconectado com sucesso!", null);
+		} catch (error) {
+			throw error;
+		}
+	}
+
 	async getUserList() {
 		try {
 			const repository = new UserRepository();
