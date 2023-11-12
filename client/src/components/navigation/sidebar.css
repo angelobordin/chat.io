@@ -21,6 +21,8 @@ li {
 	padding: 10px;
 	margin-bottom: 5px;
 	transition: background-color 0.3s;
+	display: flex;
+	justify-content: space-between;
 }
 
 li:hover {

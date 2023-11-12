@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import io from "socket.io-client";
+import useSocket from "../../hooks/useSocket";
 import "./chat.css";
-import { localhostURL } from "../../util/api/routes";
-let socket;
-let room;
 
 const Chat = ({ selectedContact, userData }) => {
+	let socket = useSocket();
+
 	const [room, setRoom] = useState("");
 	const [messages, setMessages] = useState([]);
 	const [newMessage, setNewMessage] = useState("");
@@ -13,10 +12,6 @@ const Chat = ({ selectedContact, userData }) => {
 	const addNewMessage = (newMessage) => {
 		setMessages((prevMessages) => [...prevMessages, newMessage]);
 	};
-
-	useEffect(() => {
-		socket = io(localhostURL);
-	}, []);
 
 	useEffect(() => {
 		if (selectedContact) socket.emit("chat", { sender: userData.id, receiver: selectedContact._id });
