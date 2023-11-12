@@ -1,5 +1,6 @@
 import { Server as SocketIoServer } from "socket.io";
 import { MessageService } from "./service/message-service.js";
+import { socketAuth } from "./util/middleware/socketAuth.js";
 
 class SocketServer {
 	#io;
@@ -16,6 +17,7 @@ class SocketServer {
 	}
 
 	initSocketIO() {
+		this.#io.use(socketAuth);
 		this.#io.on("connection", (socket) => {
 			console.log("[IO] Connection => User has been connected", socket.id);
 

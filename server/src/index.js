@@ -6,6 +6,7 @@ import http from "http";
 import UserRoutes from "./routes/user-routes.js";
 import Database from "./util/database/mongo-connection.js";
 import SocketServer from "./socket.js";
+import { errorMiddleware } from "./util/middleware/errorHandler.js";
 
 class HttpServer {
 	#server;
@@ -39,8 +40,6 @@ class HttpServer {
 		this.#server.use(express.json());
 		this.#server.use(cors());
 		this.#server.use(bodyParser.json());
-		// this.#server.use(fileMiddleware);
-		// this.#server.use(decodeToken);
 		console.log("Complete!");
 	}
 
@@ -51,7 +50,7 @@ class HttpServer {
 	}
 
 	initErrorHandling() {
-		// this.#server.use(errorHandler);
+		this.#server.use(errorMiddleware);
 	}
 
 	async listen() {

@@ -15,16 +15,7 @@ export class UserController {
 
 			return res.send(result);
 		} catch (error) {
-			if (error instanceof Error) {
-				return res.send({
-					status: 400,
-					message: error.message,
-					error: true,
-					data: null,
-				});
-			}
-
-			return res.send(error);
+			throw error;
 		}
 	}
 
@@ -42,16 +33,7 @@ export class UserController {
 
 			return res.send(result);
 		} catch (error) {
-			if (error instanceof Error) {
-				return res.send({
-					status: 400,
-					message: error.message,
-					error: true,
-					data: null,
-				});
-			}
-
-			return res.send(error);
+			throw error;
 		}
 	}
 
@@ -68,16 +50,7 @@ export class UserController {
 
 			return res.send(result);
 		} catch (error) {
-			if (error instanceof Error) {
-				return res.send({
-					status: 400,
-					message: error.message,
-					error: true,
-					data: null,
-				});
-			}
-
-			return res.send(error);
+			throw error;
 		}
 	}
 }
