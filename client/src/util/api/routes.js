@@ -8,6 +8,10 @@ export const ROUTE_USER_SIGNUP = () => {
 	return localhostURL.concat(`/user/signup`);
 };
 
+export const ROUTE_USER_SIGNOUt = () => {
+	return localhostURL.concat(`/user/logout`);
+};
+
 export const ROUTE_USER_LIST = () => {
 	return localhostURL.concat(`/user/list`);
 };

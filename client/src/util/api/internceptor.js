@@ -23,25 +23,10 @@ AxionsInstance.interceptors.response.use(
 		return response;
 	},
 	(error) => {
-		if (error.response) {
-			const erro = error.response.data;
-
-			if (erro.status === 401) {
-				window.location.href = "/signin";
-				return Promise.reject(error);
-			}
-
-			if (erro.status === 400) {
-				toast.error(erro.message);
-
-				return Promise.reject(error);
-			}
-
-			toast.error(erro.title);
+		if (error.response.data.message) {
+			toast.error(error.response.data.message);
 		} else {
 			toast.error("Erro de conexão. Tente novamente.");
 		}
-
-		return Promise.reject(error);
 	}
 );

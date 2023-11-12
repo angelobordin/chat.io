@@ -43,7 +43,7 @@ class Database {
 				name: "Usuário Admin",
 				username: "admin",
 				password: "admin",
-				status: true,
+				status: false,
 				isAdmin: true,
 			});
 

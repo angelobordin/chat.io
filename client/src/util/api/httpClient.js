@@ -1,18 +1,26 @@
 import { AxionsInstance } from "../api/internceptor.js";
-import { ROUTE_USER_LIST, ROUTE_USER_SIGNIN, ROUTE_USER_SIGNUP } from "./routes.js";
+import { ROUTE_USER_LIST, ROUTE_USER_SIGNIN, ROUTE_USER_SIGNOUt, ROUTE_USER_SIGNUP } from "./routes.js";
 
 export class HttpClient {
 	static async signIn(username, password) {
 		try {
 			return await AxionsInstance.post(ROUTE_USER_SIGNIN(), { username, password });
 		} catch (error) {
-			console.log(error);
+			throw error;
 		}
 	}
 
 	static async signUp(name, username, password) {
 		try {
-			return await AxionsInstance.post(ROUTE_USER_SIGNUP(), { name, username, password, status: true });
+			return await AxionsInstance.post(ROUTE_USER_SIGNUP(), { name, username, password, status: false });
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async signOut(userId) {
+		try {
+			return await AxionsInstance.post(ROUTE_USER_SIGNOUt(), { _id: userId });
 		} catch (error) {
 			throw error;
 		}
