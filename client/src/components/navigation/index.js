@@ -10,8 +10,14 @@ const Navigation = ({ onSelectContact, userData }) => {
 	const [selectedContact, setSelectedContact] = useState(null);
 
 	useEffect(() => {
-		socket.on("update user status", (data) => {
-			console.log(data);
+		socket.on("update status", (userId) => {
+			const updatedContacts = contacts.map((contact) => (contact._id === userId ? { ...contact, status: true } : contact));
+
+			setContacts(updatedContacts);
+		});
+
+		socket.on("new register", (newUser) => {
+			setContacts((prevContacts) => [...prevContacts, newUser]);
 		});
 	});
 
@@ -22,11 +28,10 @@ const Navigation = ({ onSelectContact, userData }) => {
 
 			const filteredContacts = contactList.filter((contact) => contact._doc._id.toString() !== userData.id.toString()).map((contact) => contact._doc);
 
-			setContacts((prevContacts) => [...prevContacts, ...filteredContacts]);
+			setContacts(filteredContacts);
 		};
 
 		handleContacts();
-		console.log("contatos", contacts);
 	}, [userData.id]);
 
 	const handleSelectContact = (contact) => {

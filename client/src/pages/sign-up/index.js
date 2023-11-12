@@ -4,8 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/input";
 import Button from "../../components/button";
 import useAuth from "../../hooks/useAuth";
+import useSocket from "../../hooks/useSocket";
 
 const Signup = () => {
+	let socket = useSocket();
 	const [name, setName] = useState("");
 	const [username, setUsername] = useState("");
 	const [usernameConf, setUsernameConf] = useState("");
@@ -24,7 +26,10 @@ const Signup = () => {
 			return;
 		}
 
-		if (await signup(name, username, password)) navigate("/");
+		if (await signup(name, username, password)) {
+			socket.emit("register", username);
+			navigate("/");
+		}
 	};
 
 	return (
