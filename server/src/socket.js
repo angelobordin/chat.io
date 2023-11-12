@@ -29,9 +29,15 @@ class SocketServer {
 			});
 
 			socket.on("chat.message", async (message) => {
-				await MessageService.registerMessage(message);
+				const chatData = await MessageService.registerMessage(message);
+				const users = chatData.data.userNames;
 
 				socket.to(message.room).emit("chat.message", message);
+
+				this.#io.emit("message notification", {
+					sender: users.filter((user) => user.id === message.user)[0],
+					receiver: users.filter((user) => user.id !== message.user)[0],
+				});
 			});
 
 			socket.on("login", (userId) => {
