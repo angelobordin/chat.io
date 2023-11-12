@@ -44,7 +44,7 @@ export class UserService {
 
 			await this.checkUserCredentials(user, loginUserData.password);
 
-			const token = Jwt.sign(loginUserData, process.env.PASSOWORD_SECRET, { expiresIn: "30d" });
+			const token = Jwt.sign(loginUserData, process.env.TOKEN_SECRET, { expiresIn: "30d" });
 
 			const userData = {
 				nome: user.nome,
@@ -86,6 +86,7 @@ export class UserService {
 		const repository = new UserRepository();
 		const userExists = await repository.getUserByUserName(username);
 		if (userExists) throw new Error(`Usuário já cadastrado!`);
+		return;
 	}
 
 	/**

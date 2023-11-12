@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./sidebar.css";
+import { HttpClient } from "../../util/api/httpClient";
 
 const Navigation = ({ onSelectContact, userData }) => {
 	const [contacts, setContacts] = useState([]);
@@ -8,12 +8,11 @@ const Navigation = ({ onSelectContact, userData }) => {
 
 	useEffect(() => {
 		const handleContacts = async () => {
-			const response = await axios.get("http://localhost:8080/user/list");
+			const response = await HttpClient.getUserList();
 			const contactList = response.data.data;
 
 			const filteredContacts = contactList.filter((contact) => contact._doc._id.toString() !== userData.id.toString()).map((contact) => contact._doc);
 
-			// Atualiza o estado de maneira assíncrona para garantir a versão mais recente do estado
 			setContacts((prevContacts) => [...prevContacts, ...filteredContacts]);
 		};
 
