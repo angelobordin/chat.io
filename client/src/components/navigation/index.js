@@ -19,6 +19,9 @@ const Navigation = ({ onSelectContact, userData }) => {
 		socket.on("new register", (newUser) => {
 			setContacts((prevContacts) => [...prevContacts, newUser]);
 		});
+		return () => {
+			socket.off("new register");
+		};
 	});
 
 	useEffect(() => {
