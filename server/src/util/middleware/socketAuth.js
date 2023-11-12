@@ -4,12 +4,13 @@ import TokenInvalidError from "../errors/invalidToken.js";
 
 export function socketAuth(socket, next) {
 	try {
-		if (!socket.handshake.headers.authorization) throw new AuthenticationError(`Token ausente!`);
+		const { authorization } = socket.handshake.headers;
+		if (!authorization) throw new AuthenticationError("Token ausente!");
 
-		const token = socket.handshake.headers.authorization;
+		const token = authorization.replace("Bearer ", ""); // Remova 'Bearer ' do início do token, se presente
 
 		const tokenIsValid = Jwt.verify(token, process.env.TOKEN_SECRET);
-		if (!tokenIsValid) throw new TokenInvalidError(`Token Inválido`);
+		if (!tokenIsValid) throw new TokenInvalidError("Token Inválido");
 
 		next();
 	} catch (error) {

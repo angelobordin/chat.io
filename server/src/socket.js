@@ -61,6 +61,11 @@ class SocketServer {
 				console.log("[IO] Disconnection => User has been disconnected");
 			});
 		});
+
+		this.#io.on("error", (error) => {
+			console.error("Erro no Socket.io:", error.message);
+			// Implemente lógica adicional de tratamento de erros, se necessário
+		});
 	}
 }
 

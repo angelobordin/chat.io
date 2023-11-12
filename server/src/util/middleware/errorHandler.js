@@ -1,3 +1,4 @@
+import JsonWebTokenError from "jsonwebtoken";
 import AuthenticationError from "../errors/authenticationError.js";
 import TokenInvalidError from "../errors/invalidToken.js";
 
@@ -25,6 +26,13 @@ export async function errorMiddleware(err, req, res, next) {
 				data: null,
 			});
 		} else if (err instanceof Error) {
+			res.send({
+				status: 400,
+				message: err.message,
+				error: true,
+				data: null,
+			});
+		} else if (err instanceof JsonWebTokenError) {
 			res.send({
 				status: 400,
 				message: err.message,
