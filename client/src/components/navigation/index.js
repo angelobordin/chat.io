@@ -68,7 +68,9 @@ const Navigation = ({ onSelectContact, userData }) => {
 					</li>
 				))}
 			</ul>
-			<Button Text="Desconectar" onClick={signOut} />
+			<div className="button">
+				<Button Text="Desconectar" onClick={signOut} />
+			</div>
 		</div>
 	);
 };
