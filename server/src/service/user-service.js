@@ -43,7 +43,7 @@ export class UserService {
 
 			await this.checkUserCredentials(user, loginUserData.password);
 
-			const token = Jwt.sign(loginUserData, process.env.PASSOWORD_SECRET, { expiresIn: "1h" });
+			const token = Jwt.sign(loginUserData, process.env.PASSOWORD_SECRET, { expiresIn: "30d" });
 
 			const userData = {
 				nome: user.nome,
