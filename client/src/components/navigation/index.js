@@ -9,24 +9,16 @@ const Navigation = ({ onSelectContact, userData }) => {
 	useEffect(() => {
 		const handleContacts = async () => {
 			const response = await axios.get("http://localhost:8080/user/list");
-			console.log(response.data);
 			const contactList = response.data.data;
 
-			for (let index = 0; index < contactList.length; index++) {
-				if (contactList[index]._doc._id !== userData.id) {
-					setContacts([
-						...contacts,
-						{
-							id: contactList[index]._doc._id,
-							nome: contactList[index]._doc.name,
-						},
-					]);
-				}
-			}
+			const filteredContacts = contactList.filter((contact) => contact._doc._id.toString() !== userData.id.toString()).map((contact) => contact._doc);
+
+			// Atualiza o estado de maneira assíncrona para garantir a versão mais recente do estado
+			setContacts((prevContacts) => [...prevContacts, ...filteredContacts]);
 		};
 
 		handleContacts();
-	}, []);
+	}, [userData.id]);
 
 	const handleSelectContact = (contact) => {
 		setSelectedContact(contact);
@@ -36,9 +28,9 @@ const Navigation = ({ onSelectContact, userData }) => {
 	return (
 		<div className="sidebar">
 			<ul>
-				{contacts.map((contact) => (
-					<li key={contact.id} onClick={() => handleSelectContact(contact)} className={selectedContact === contact ? "active" : ""}>
-						{contact.nome}
+				{contacts.map((contact, index) => (
+					<li key={index} onClick={() => handleSelectContact(contact)} className={selectedContact === contact ? "active" : ""}>
+						{contact.name}
 					</li>
 				))}
 			</ul>

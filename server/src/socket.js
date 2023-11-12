@@ -1,4 +1,5 @@
 import { Server as SocketIoServer } from "socket.io";
+import { MessageService } from "./service/message-service.js";
 
 class SocketServer {
 	#io;
@@ -8,7 +9,6 @@ class SocketServer {
 			pingTimeout: 60000,
 			cors: {
 				origin: "*", // Permite de qualquer origem
-				methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // Permite qualquer método
 			},
 		});
 
@@ -19,14 +19,18 @@ class SocketServer {
 		this.#io.on("connection", (socket) => {
 			console.log("[IO] Connection => User has been connected", socket.id);
 
-			// socket.on("setup", (user) => console.log(user));
+			socket.on("chat", async (userData) => {
+				const chat = await MessageService.getChat(userData);
 
-			socket.on("chat", (userData) => {});
+				socket.join(chat.data._id.toString());
 
-			socket.on("chat.message", (message) => {
-				// Regra de negócio para cadastrar e tratar mensagem;
+				socket.emit("chat", chat);
+			});
 
-				socket.emit("chat.message", message);
+			socket.on("chat.message", async (message) => {
+				await MessageService.registerMessage(message);
+
+				socket.to(message.room).emit("chat.message", message);
 			});
 
 			socket.on("disconnect", () => {

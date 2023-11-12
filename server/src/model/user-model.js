@@ -7,6 +7,6 @@ const userSchema = mongoose.Schema({
 	status: { type: "Boolean", required: true },
 });
 
-const UserModel = mongoose.model("user", userSchema);
+const UserModel = mongoose.model("User", userSchema);
 
 export default UserModel;

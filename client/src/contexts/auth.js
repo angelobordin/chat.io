@@ -28,8 +28,8 @@ export const AuthProvider = ({ children }) => {
 		}
 	};
 
-	const signup = async (nome, username, password) => {
-		const response = await axios.post("http://localhost:8080/user/signup", { nome, username, password });
+	const signup = async (name, username, password) => {
+		const response = await axios.post("http://localhost:8080/user/signup", { name, username, password, status: true });
 
 		if (!response.data.error) {
 			toast.success(response.data.message);

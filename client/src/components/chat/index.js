@@ -2,32 +2,42 @@ import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import "./chat.css";
 let socket;
+let room;
 
 const Chat = ({ selectedContact, userData }) => {
-	console.log(selectedContact, userData);
-
+	const [room, setRoom] = useState("");
 	const [messages, setMessages] = useState([]);
 	const [newMessage, setNewMessage] = useState("");
 
+	const addNewMessage = (newMessage) => {
+		setMessages((prevMessages) => [...prevMessages, newMessage]);
+	};
+
 	useEffect(() => {
 		socket = io("http://localhost:8080");
-		// socket.emit("setup", userData);
 	}, []);
 
 	useEffect(() => {
-		if (selectedContact) socket.emit("chat", { sender: userData.id, receiver: selectedContact.id });
+		if (selectedContact) socket.emit("chat", { sender: userData.id, receiver: selectedContact._id });
+
+		socket.on("chat", (chat) => {
+			setRoom(chat.data._id);
+			setMessages(chat.data.messages);
+		});
+		return () => socket.off("chat");
 	}, [selectedContact]);
 
 	useEffect(() => {
-		const handlerNewMessage = (newMessage) => setMessages([...messages, newMessage]);
-
-		socket.on("chat.message", handlerNewMessage);
-		return () => socket.off("chat.message", handlerNewMessage);
-	}, [messages]);
+		socket.on("chat.message", (newMessage) => {
+			addNewMessage(newMessage);
+		});
+		return () => socket.off("chat.message");
+	}, []);
 
 	const handlerSendMessage = () => {
 		if (newMessage.trim()) {
-			socket.emit("chat.message", { sender: "Me", text: newMessage });
+			socket.emit("chat.message", { user: userData.id, content: newMessage, room });
+			addNewMessage({ user: userData.id, content: newMessage, room });
 			setNewMessage("");
 		}
 	};
@@ -38,8 +48,8 @@ const Chat = ({ selectedContact, userData }) => {
 				<>
 					<div className="messages">
 						{messages.map((message, index) => (
-							<div key={index} className={message.sender === "Me" ? "sent" : "received"}>
-								<p>{message.text}</p>
+							<div key={index} className={message.user === userData.id ? "sent" : "received"}>
+								<p>{message.content}</p>
 							</div>
 						))}
 					</div>

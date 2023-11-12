@@ -1,6 +1,7 @@
 import Jwt from "jsonwebtoken";
 import { UserRepository } from "../repository/user-repository.js";
 import { Password } from "../util/functions/crypt-password.js";
+import { createSuccessResponse } from "../util/functions/response.js";
 
 export class UserService {
 	/**
@@ -25,7 +26,7 @@ export class UserService {
 			const repository = new UserRepository();
 			const result = await repository.registerUser(newUserData);
 
-			return this.createSuccessResponse("Usuário cadastrado com sucesso!", result);
+			return createSuccessResponse("Usuário cadastrado com sucesso!", result);
 		} catch (error) {
 			throw error;
 		}
@@ -51,7 +52,7 @@ export class UserService {
 				id: user._id,
 			};
 
-			return this.createSuccessResponse("Usuário logado com sucesso!", {
+			return createSuccessResponse("Usuário logado com sucesso!", {
 				userData,
 				token,
 			});
@@ -70,7 +71,7 @@ export class UserService {
 				return resto;
 			});
 
-			return this.createSuccessResponse("Lista de contatos carregada!", filteredUserList);
+			return createSuccessResponse("Lista de contatos carregada!", filteredUserList);
 		} catch (error) {
 			throw error;
 		}
@@ -108,19 +109,5 @@ export class UserService {
 	 */
 	async checkUserCredentials(user, password) {
 		if (!(await Password.validPassword(user, password))) throw new Error(`Credenciais incorretas!`);
-	}
-
-	/**
-	 * @private
-	 * @param {string} message
-	 * @param {object} data
-	 * @returns {object}
-	 */
-	createSuccessResponse(message, data) {
-		return {
-			status: 200,
-			message,
-			data,
-		};
 	}
 }
