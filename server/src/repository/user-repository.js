@@ -1,12 +1,6 @@
-import Database from "../util/database/mongo-connection.js";
+import UserModel from "../model/user-model.js";
 
 export class UserRepository {
-	#database;
-
-	constructor() {
-		this.#database = new Database();
-	}
-
 	/**
 	 *
 	 * @param {object} newUserData
@@ -18,16 +12,11 @@ export class UserRepository {
 	 */
 	async registerUser(newUserData) {
 		try {
-			await this.#database.connect();
-			const userCollection = this.#database.getUserCollection();
-
-			const result = await userCollection.insertOne(newUserData);
+			const result = await UserModel.create({ ...newUserData });
 
 			return result;
 		} catch (error) {
 			throw error;
-		} finally {
-			await this.#database.close();
 		}
 	}
 
@@ -38,31 +27,21 @@ export class UserRepository {
 	 */
 	async getUserByUserName(username) {
 		try {
-			await this.#database.connect();
-			const userCollection = this.#database.getUserCollection();
-
-			const result = await userCollection.findOne({ username: username });
+			const result = await UserModel.findOne({ username: username });
 
 			return result;
 		} catch (error) {
 			throw error;
-		} finally {
-			await this.#database.close();
 		}
 	}
 
 	async getUserList() {
 		try {
-			await this.#database.connect();
-			const userCollection = this.#database.getUserCollection();
-
-			const result = await userCollection.find().toArray();
+			const result = await UserModel.find();
 
 			return result;
 		} catch (error) {
 			throw error;
-		} finally {
-			await this.#database.close();
 		}
 	}
 }
