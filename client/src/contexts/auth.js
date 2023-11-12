@@ -1,7 +1,7 @@
 import "react-toastify/dist/ReactToastify.css";
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { HttpClient } from "../util/api/httpClient.js";
 
 export const AuthContext = createContext({});
 
@@ -13,11 +13,11 @@ export const AuthProvider = ({ children }) => {
 	}, []);
 
 	const signin = async (username, password) => {
-		const response = await axios.post("http://localhost:8080/user/signin", { username, password });
+		const response = await HttpClient.signIn(username, password);
 
 		if (!response.data.error) {
 			localStorage.setItem("user_data", JSON.stringify(response.data.data.userData));
-			localStorage.setItem("token", JSON.stringify(response.data.data.token));
+			localStorage.setItem("token", response.data.data.token);
 
 			toast.success(response.data.message);
 			setSigned(true);
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	const signup = async (name, username, password) => {
-		const response = await axios.post("http://localhost:8080/user/signup", { name, username, password, status: true });
+		const response = await HttpClient.signUp(name, username, password);
 
 		if (!response.data.error) {
 			toast.success(response.data.message);

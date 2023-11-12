@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import "./chat.css";
+import { localhostURL } from "../../util/api/routes";
 let socket;
 let room;
 
@@ -14,7 +15,7 @@ const Chat = ({ selectedContact, userData }) => {
 	};
 
 	useEffect(() => {
-		socket = io("http://localhost:8080");
+		socket = io(localhostURL);
 	}, []);
 
 	useEffect(() => {
