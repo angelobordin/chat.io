@@ -5,6 +5,7 @@ class SocketServer {
 
 	constructor(httpServer) {
 		this.#io = new SocketIoServer(httpServer, {
+			pingTimeout: 60000,
 			cors: {
 				origin: "*", // Permite de qualquer origem
 				methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // Permite qualquer método
@@ -16,7 +17,11 @@ class SocketServer {
 
 	initSocketIO() {
 		this.#io.on("connection", (socket) => {
-			console.log("[IO] Connection => User has been connected");
+			console.log("[IO] Connection => User has been connected", socket.id);
+
+			// socket.on("setup", (user) => console.log(user));
+
+			socket.on("chat", (userData) => {});
 
 			socket.on("chat.message", (message) => {
 				// Regra de negócio para cadastrar e tratar mensagem;

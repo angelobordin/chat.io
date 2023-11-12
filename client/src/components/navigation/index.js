@@ -16,7 +16,7 @@ const Navigation = ({ onSelectContact, userData }) => {
 					setContacts([
 						...contacts,
 						{
-							_id: contactList[index]._id,
+							id: contactList[index]._id,
 							nome: contactList[index].nome,
 						},
 					]);
@@ -36,7 +36,7 @@ const Navigation = ({ onSelectContact, userData }) => {
 		<div className="sidebar">
 			<ul>
 				{contacts.map((contact) => (
-					<li key={contact._id} onClick={() => handleSelectContact(contact)} className={selectedContact === contact ? "active" : ""}>
+					<li key={contact.id} onClick={() => handleSelectContact(contact)} className={selectedContact === contact ? "active" : ""}>
 						{contact.nome}
 					</li>
 				))}
