@@ -82,12 +82,12 @@ Para isso abra o VS Code em seu dispositivo, após clique em:
 ⚠️ ATENÇÃO ⚠️ <br>
 **Deve haver um servidor MongoDB ja criado com usuário root para realização das operações na database definida no arquivo .env !!**
 
-- Entre na pasta "Server";
+- Entre na pasta **Server**;
 - Execute o comando **npm install** para instalar as dependências;
 - Realize uma cópia do arquivo **.env.example** e renomeie como **.env**;
 - Dentro do arquivo **.env** altere a constante **MONGO_URL** conforme necessário para realizar conexão com seu servidor MongoDB;
 - Execute o comando **npm run start** para iniciar o servidor na porta 8080;
-- Caso houver algum conflito referente a porta de inicialização do servidor, basta a váriavel **SERVER_PORT** no arquivo **.env**.
+  - Caso houver algum conflito referente a porta de inicialização do servidor, basta alterar a váriavel **SERVER_PORT** no arquivo **.env**.
 
 <h3>FrontEnd</h3>
 
