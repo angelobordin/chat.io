@@ -13,29 +13,28 @@ Projeto de chat em realtime utilizando WebSockets juntamente com servidor HTTP.<
 <h2>Funcionalidades</h2>
 <h3>Implementadas :heavy_check_mark:</h3>
 
--   `Cadastro de usuário`:
-    -   Método: POST
-    -   Endpoint: `/user/signup`
-      - Propriedades:
-        - "name": String
-        - "username": String
-        - "password": String
-        - "status": Boolean  
--   `Login de usuário`:
-    -   Método: POST
-    -   Endpoint: `/user/signin`
-      - Propriedades:
-        - "username": String
-        - "password": String
--   `Logout de usuário`:
-    -   Método: POST
-    -   Endpoint: `/user/logout`
-      - Propriedades:
-        - "_id": String  
--   `Listagem de usuários cadastrados`:
-    -   Método: GET
-    -   Endpoint: `/user/list`
-
+- `Cadastro de usuário`:
+  - Método: POST
+  - Endpoint: `/user/signup`
+  - Propriedades:
+    - "name": String
+    - "username": String
+    - "password": String
+    - "status": Boolean
+- `Login de usuário`:
+  - Método: POST
+  - Endpoint: `/user/signin`
+  - Propriedades:
+    - "username": String
+    - "password": String
+- `Logout de usuário`:
+  - Método: POST
+  - Endpoint: `/user/logout`
+  - Propriedades:
+    - "\_id": String
+- `Listagem de usuários cadastrados`:
+  - Método: GET
+  - Endpoint: `/user/list`
 
 <h2>Acesso ao projeto 📁</h2>
 
@@ -47,32 +46,51 @@ Você pode [acessar o código fonte do projeto inicial aqui](https://github.com/
 ⚠️ [Node](https://nodejs.org/en/)<br>
 ⚠️ [MongoDB](https://www.mongodb.com/try/download/community)<br>
 ⚠️ [VS Code](https://code.visualstudio.com/Download)<br>
+⚠️ [Docker](https://docs.docker.com/desktop/install/windows-install/)<br>
 
-⚠️ ATENÇÃO ⚠️ <br> 
-__Deve haver um servidor MongoDB ja criado com usuário root para realização das operações na database definida no arquivo .env !!__
+⚠️ ATENÇÃO ⚠️ <br>
+**Deve haver um servidor MongoDB ja criado com usuário root para realização das operações na database definida no arquivo .env !!**
 
 Após baixar o projeto no seu dispositivo, você pode abri-lo no VS Code.<br>
 Para isso abra o VS Code em seu dispositivo, após clique em:
 
 <h3>VS Code</h3>
 
--   _File >> Open Folder..._ ou digite _Ctrl+K_ / _Ctrl+O_;
--   Abra o terminal em _Terminal >> New Terminal_;
+- _File >> Open Folder..._ ou digite _Ctrl+K_ / _Ctrl+O_;
+- Abra o terminal em _Terminal >> New Terminal_;
+
+Aqui temos duas situações:
+
+<h2>Executando o Projeto com Docker</h2>
+
+**Você deve possuir Docker e Docker Composer caso queira executar a aplicação com containers !!**
+
+- Realize uma cópia do arquivo **.env.example** e renomeie como **.env**;
+- Altere as váriaveis conforme estiverem definidas no arquivo **docker-compose.yml** no service **db**:
+  - **[USER_ROOT]** deve ser substituida pelo valor da variável **MONGO_INITDB_ROOT_USERNAME**;
+  - **[SENHA_ROOT]** deve ser substituida pelo valor da variável **MONGO_INITDB_ROOT_PASSWORD**;
+  - **[HOST]** deve ser substituida pelo valor da propriedade **container_name**;
+  - **[DATABASE]** deve ser substituida pelo valor da propriedade **MONGO_INITDB_DATABASE**;
+- Em seguida basta executar o comando **docker-compose up --build** dentro da pasta do projeto;
+- Caso houver algum conflito referente a porta de inicialização do servidor, basta a váriavel **SERVER_PORT** no arquivo **.env**.
+  - Caso alterar a váriavel **SERVER_PORT** o mesmo valor deve ser inserido no arquivo **docker-compose.yml** no caminho services > backend > ports;
+
+<h2>Executando o Projeto sem Docker</h2>
 
 <h3>BackEnd</h3>
 
--   Entre na pasta "Server";
--   Execute o comando __npm install__ para instalar as dependências;
--   Realize uma cópia do arquivo __.env.example__ e renomeie como __.env__;
--   Dentro do arquivo __.env__ altere a constante __MONGO_URL__ conforme necessário para realizar conexão com seu servidor MongoDB;
--   Execute o comando __npm run start__ para iniciar o servidor na porta 8080;
-  -  Caso houver algum conflito referente a porta de inicialização do servidor, basta alterá-la no arquivo __.env__.
+- Entre na pasta "Server";
+- Execute o comando **npm install** para instalar as dependências;
+- Realize uma cópia do arquivo **.env.example** e renomeie como **.env**;
+- Dentro do arquivo **.env** altere a constante **MONGO_URL** conforme necessário para realizar conexão com seu servidor MongoDB;
+- Execute o comando **npm run start** para iniciar o servidor na porta 8080;
+- Caso houver algum conflito referente a porta de inicialização do servidor, basta a váriavel **SERVER_PORT** no arquivo **.env**.
 
 <h3>FrontEnd</h3>
 
--   Entre na pasta "client";
--   Execute o comando __npm install__ para instalar as dependências;
--   Execute o comando __npm run start__ para iniciar a aplicação na porta 3000;
+- Entre na pasta "client";
+- Execute o comando **npm install** para instalar as dependências;
+- Execute o comando **npm run start** para iniciar a aplicação na porta 3000;
 
 <h2>Tecnologias Utilizadas</h2>
 
