@@ -1,4 +1,4 @@
-<h1>Chat.IO/h1>
+<h1>Chat.IO</h1>
 
 <p>
   <img src="https://img.shields.io/badge/status-em%20desenvolvimento-brightgreen"/>
