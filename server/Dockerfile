@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["bash", "-c", "source .env && npm run start"]
+CMD ["bash", "-c", "source .env && npm run server"]
