@@ -56,7 +56,7 @@ Para isso abra o VS Code em seu dispositivo, após clique em:
 - _File >> Open Folder..._ ou digite _Ctrl+K_ / _Ctrl+O_;
 - Abra o terminal em _Terminal >> New Terminal_;
 
-<h3>Aqui temos duas situações:</h3>h3>
+<h3>Aqui temos duas situações:</h3>
 
 ⚠️ ATENÇÃO ⚠️ <br>
 **Para rodar o projeto em cluster altere a váriavel CLUSTER_MODE para "true" no arquivo .env !!**
