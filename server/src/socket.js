@@ -32,7 +32,6 @@ class SocketServer {
 
 			socket.on("chat.message", async (message) => {
 				const chatData = await MessageService.registerMessage(message);
-				console.log(chatData);
 				const users = chatData.data.userNames;
 
 				socket.to(message.room).emit("chat.message", message);
