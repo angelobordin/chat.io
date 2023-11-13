@@ -2,11 +2,9 @@ import mongoose from "mongoose";
 import UserModel from "../../model/user-model.js";
 
 class Database {
-	url = "mongodb://root:root@localhost:27017/chat_database?authSource=admin";
-
 	async connect() {
 		try {
-			const connection = await mongoose.connect(this.url);
+			const connection = await mongoose.connect(process.env.MONGO_URL);
 
 			connection.connection.on("error", (err) => {
 				console.error("Erro na conexão MongoDB:", err);
