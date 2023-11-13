@@ -8,6 +8,8 @@ import Database from "./util/database/mongo-connection.js";
 import SocketServer from "./socket.js";
 import { errorMiddleware } from "./util/middleware/errorHandler.js";
 
+const processID = process.pid;
+
 class HttpServer {
 	#server;
 	#port;
@@ -55,8 +57,13 @@ class HttpServer {
 
 	async listen() {
 		await this.initDatabase();
-		this.#httpServer.listen(this.#port, () => console.log(`[HTTP] Server => Server is running at port ${this.#port}`));
+		this.#httpServer.listen(this.#port, () => console.log(`[HTTP] Server => Server is running at port ${this.#port} - Process  ${processID}`));
 	}
 }
+
+// Code to finish process with error to test cluster mode
+// setTimeout(() => {
+// 	process.exit(1);
+// }, Math.random() * 1e4);
 
 new HttpServer(process.env.SERVER_PORT).listen();

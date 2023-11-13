@@ -5,12 +5,15 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
-		"start": "nodemon src/index",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"server": "if [ \"$CLUSTER_MODE\" = \"true\" ]; then npm run cluster; else npm run start; fi",
+		"cluster": "node src/clusterServer.js",
+		"start": "node src/index.js",
+		"test": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [ -c 1 -d 5 ] localhost:8080"
 	},
 	"author": "@angelobordin",
 	"license": "ISC",
 	"devDependencies": {
+		"autocannon": "^7.12.0",
 		"nodemon": "^3.0.1"
 	},
 	"dependencies": {

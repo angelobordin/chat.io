@@ -61,6 +61,9 @@ Para isso abra o VS Code em seu dispositivo, após clique em:
 
 Aqui temos duas situações:
 
+⚠️ ATENÇÃO ⚠️ <br>
+**Para rodar o projeto em cluster altere a váriavel CLUSTER_MODE para "true" no arquivo .env !!**
+
 <h2>Executando o Projeto com Docker</h2>
 
 **Você deve possuir Docker e Docker Composer caso queira executar a aplicação com containers !!**
