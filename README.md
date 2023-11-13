@@ -48,9 +48,6 @@ Você pode [acessar o código fonte do projeto inicial aqui](https://github.com/
 ⚠️ [VS Code](https://code.visualstudio.com/Download)<br>
 ⚠️ [Docker](https://docs.docker.com/desktop/install/windows-install/)<br>
 
-⚠️ ATENÇÃO ⚠️ <br>
-**Deve haver um servidor MongoDB ja criado com usuário root para realização das operações na database definida no arquivo .env !!**
-
 Após baixar o projeto no seu dispositivo, você pode abri-lo no VS Code.<br>
 Para isso abra o VS Code em seu dispositivo, após clique em:
 
@@ -59,7 +56,7 @@ Para isso abra o VS Code em seu dispositivo, após clique em:
 - _File >> Open Folder..._ ou digite _Ctrl+K_ / _Ctrl+O_;
 - Abra o terminal em _Terminal >> New Terminal_;
 
-Aqui temos duas situações:
+<h3>Aqui temos duas situações:</h3>h3>
 
 ⚠️ ATENÇÃO ⚠️ <br>
 **Para rodar o projeto em cluster altere a váriavel CLUSTER_MODE para "true" no arquivo .env !!**
@@ -81,6 +78,9 @@ Aqui temos duas situações:
 <h2>Executando o Projeto sem Docker</h2>
 
 <h3>BackEnd</h3>
+
+⚠️ ATENÇÃO ⚠️ <br>
+**Deve haver um servidor MongoDB ja criado com usuário root para realização das operações na database definida no arquivo .env !!**
 
 - Entre na pasta "Server";
 - Execute o comando **npm install** para instalar as dependências;
