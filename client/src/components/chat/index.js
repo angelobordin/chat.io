@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useSocket from "../../hooks/useSocket";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import "./chat.css";
 
 const Chat = ({ selectedContact, userData }) => {
@@ -12,6 +14,21 @@ const Chat = ({ selectedContact, userData }) => {
 	const addNewMessage = (newMessage) => {
 		setMessages((prevMessages) => [...prevMessages, newMessage]);
 	};
+
+	useEffect(() => {
+		socket.on("message notification", (messageData) => {
+			const user = JSON.parse(localStorage.getItem("user_data"));
+			if (messageData.receiver.id === user.id && room !== messageData.room) {
+				const { sender } = messageData;
+
+				toast.success(`${sender.name} te enviou uma mensagem!`);
+			}
+		});
+
+		return () => {
+			socket.off("message notification");
+		};
+	});
 
 	useEffect(() => {
 		if (selectedContact) socket.emit("chat", { sender: userData.id, receiver: selectedContact._id });

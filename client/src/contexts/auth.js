@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
 			setSigned(true);
 			return true;
 		} else {
+			if (response.data.message) toast.error(response.data.message);
 			return false;
 		}
 	};
