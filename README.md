@@ -48,6 +48,9 @@ Você pode [acessar o código fonte do projeto inicial aqui](https://github.com/
 ⚠️ [MongoDB](https://www.mongodb.com/try/download/community)<br>
 ⚠️ [VS Code](https://code.visualstudio.com/Download)<br>
 
+⚠️ ATENÇÃO ⚠️ <br> 
+__Deve haver um servidor MongoDB ja criado com usuário root para realização das operações na database definida no arquivo .env !!__
+
 Após baixar o projeto no seu dispositivo, você pode abri-lo no VS Code.<br>
 Para isso abra o VS Code em seu dispositivo, após clique em:
 
