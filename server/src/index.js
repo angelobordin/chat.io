@@ -59,4 +59,4 @@ class HttpServer {
 	}
 }
 
-new HttpServer(8080).listen();
+new HttpServer(process.env.SERVER_PORT).listen();
