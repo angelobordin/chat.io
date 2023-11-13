@@ -106,6 +106,7 @@ Aqui temos duas situações:
   <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original-wordmark.svg" width="20" height="20"/><b> MongoDB</b></li>
   <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="20" height="20"/><b> ReactJS</b></li>
   <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" width="20" height="20"/><b> Socket.IO</b></li>
+  <li><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" width="20" height="20"/><b> Docker</b></li>
 </ul>
 
 # Autores
